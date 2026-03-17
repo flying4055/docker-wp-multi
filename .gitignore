@@ -11,6 +11,11 @@ backups/*
 # WordPress generated content (optional: keep as needed)
 docker/wp-site*/wp-content/uploads/
 
+# WordPress default plugins and themes (keep only index.php)
+docker/wp-site*/wp-content/plugins/akismet/
+docker/wp-site*/wp-content/plugins/hello.php
+docker/wp-site*/wp-content/themes/twentytwenty*/
+
 # OS/editor
 .DS_Store
 .vscode/
