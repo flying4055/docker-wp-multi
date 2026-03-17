@@ -1,0 +1,16 @@
+# Env & secrets
+docker/.env
+.env
+
+# Runtime data
+logs/*
+!logs/.gitkeep
+backups/*
+!backups/.gitkeep
+
+# WordPress generated content (optional: keep as needed)
+docker/wp-site*/wp-content/uploads/
+
+# OS/editor
+.DS_Store
+.vscode/

@@ -1,0 +1,38 @@
+services:
+  wordpress:
+    image: ${WORDPRESS_IMAGE}
+    container_name: wp-site1
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    ports:
+      - "${WP_SITE1_PORT}:80"
+    environment:
+      TZ: ${TZ}
+      WORDPRESS_DB_HOST: wp-mariadb:3306
+      WORDPRESS_DB_NAME: ${MARIADB_SITE1_DB}
+      WORDPRESS_DB_USER: ${MARIADB_SITE1_USER}
+      WORDPRESS_DB_PASSWORD: ${MARIADB_SITE1_PASSWORD}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_REDIS_HOST', 'wp-redis');
+        define('WP_REDIS_PORT', 6379);
+        define('WP_REDIS_PASSWORD', '${REDIS_PASSWORD}');
+        define('WP_CACHE', true);
+        define('FORCE_SSL_ADMIN', true);
+        if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO']) && $$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+          $$_SERVER['HTTPS'] = 'on';
+        }
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    healthcheck:
+      test: ["CMD", "php", "-v"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - wordpress-network
+
+networks:
+  wordpress-network:
+    external: true
+    name: ${WORDPRESS_NETWORK}

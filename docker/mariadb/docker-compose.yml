@@ -1,0 +1,33 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: wp-mariadb
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      TZ: ${TZ}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    command:
+      - --transaction-isolation=READ-COMMITTED
+      - --binlog-format=ROW
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./init/01-init-multi-site.sh:/docker-entrypoint-initdb.d/01-init-multi-site.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -p$$MARIADB_ROOT_PASSWORD --silent"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks:
+      - wordpress-network
+
+networks:
+  wordpress-network:
+    external: true
+    name: ${WORDPRESS_NETWORK}
+
+volumes:
+  mariadb_data:
