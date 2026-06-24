@@ -16,7 +16,7 @@ mapfile -t SITE_COMPOSE_FILES < <(find docker -maxdepth 2 -type f -path "docker/
 
 for compose_file in "${SITE_COMPOSE_FILES[@]}"; do
   site="$(basename "$(dirname "$compose_file")")"
-  compose_cmd --env-file docker/.env -f "$compose_file" down
+  compose_cmd --project-name "$site" --env-file docker/.env -f "$compose_file" down
   echo "[ok] stopped ${site}"
 done
 

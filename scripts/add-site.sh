@@ -80,6 +80,8 @@ fi
 mkdir -p "${SITE_DIR}/wp-content"
 
 cat > "$COMPOSE_FILE" <<EOF
+name: ${SITE_NAME}
+
 services:
   wordpress:
     image: \${WORDPRESS_IMAGE}
@@ -173,7 +175,7 @@ else
 fi
 
 if docker ps --format '{{.Names}}' | grep -qx 'wp-redis' && docker ps --format '{{.Names}}' | grep -qx 'wp-mariadb'; then
-  compose_cmd --env-file docker/.env -f "$COMPOSE_FILE" up -d
+  compose_cmd --project-name "${SITE_NAME}" --env-file docker/.env -f "$COMPOSE_FILE" up -d
   echo "[ok] ${SITE_NAME} 已启动"
 else
   echo "[warn] 核心服务未完全运行，暂未启动 ${SITE_NAME}。"

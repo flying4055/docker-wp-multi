@@ -52,8 +52,9 @@ CORE_COMPOSE_FILES=(
 
 for compose_file in "${SITE_COMPOSE_FILES[@]}" "${CORE_COMPOSE_FILES[@]}"; do
   [[ -f "$compose_file" ]] || continue
-  compose_cmd --env-file "$ENV_FILE" -f "$compose_file" down -v --remove-orphans || true
-  echo "[ok] cleaned $(basename "$(dirname "$compose_file")")"
+  project="$(basename "$(dirname "$compose_file")")"
+  compose_cmd --project-name "$project" --env-file "$ENV_FILE" -f "$compose_file" down -v --remove-orphans || true
+  echo "[ok] cleaned ${project}"
 done
 
 NETWORK_NAME="$(grep -E '^WORDPRESS_NETWORK=' "$ENV_FILE" | head -n1 | cut -d= -f2- || true)"

@@ -1,3 +1,5 @@
+name: wp-site2
+
 services:
   wordpress:
     image: ${WORDPRESS_IMAGE}

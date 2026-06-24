@@ -19,3 +19,4 @@ docker/wp-site*/wp-content/themes/twentytwenty*/
 # OS/editor
 .DS_Store
 .vscode/
+.claude/

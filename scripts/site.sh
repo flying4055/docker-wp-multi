@@ -54,8 +54,10 @@ if [[ ! -f "$COMPOSE_FILE" ]]; then
   exit 1
 fi
 
+PROJECT_NAME="wp-site${SITE_NO}"
+
 dc() {
-  compose_cmd --env-file docker/.env -f "$COMPOSE_FILE" "$@"
+  compose_cmd --project-name "$PROJECT_NAME" --env-file docker/.env -f "$COMPOSE_FILE" "$@"
 }
 
 case "$ACTION" in
